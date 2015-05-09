@@ -8,3 +8,8 @@ material and do it for yourself.
 
 This repo is more to keep track for myself and also compare code to those
 who have already completed the course.
+
+# NOTE 2
+In addition to my actual pset code, you'll find various tests I ran in
+individual .c files in various places. These were usually to test 
+something in particular before using it in the main program
