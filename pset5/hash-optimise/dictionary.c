@@ -85,13 +85,23 @@ bool check(const char* initial_word)
 {
     const char* word;
     word = initial_word; // apparently this is quicker
-    const unsigned int length = strlen(word);
+    // const unsigned int length = strlen(word);
+    unsigned int length = 0;
     
-    char low_word[length + 1];
-    for(unsigned int i = 0; i <= length; i++)
+    // won't be bigger than LENGTH...
+    char low_word[LENGTH + 1];
+    
+    //for(unsigned int i = 0; i <= length; i++)
+    //{
+    //    low_word[i] = tolower(word[i]);
+    //}
+    
+    for ( ; *initial_word; initial_word++,  length++)
     {
-        low_word[i] = tolower(word[i]);
+        low_word[length] = tolower(initial_word[length]);
     }
+    low_word[length - 1] = '\0';
+    
     const unsigned int hashed = hash(low_word);
     
     if (hash_table[hashed] != NULL)
@@ -138,7 +148,7 @@ bool load(const char* dictionary)
         {
             word[i] = tolower(word[i]);
         }
-        // Have to remove the newline otherwise hash doesn't match up later
+
         word[length - 1]='\0';
         insert(hash(word), word);
     }
