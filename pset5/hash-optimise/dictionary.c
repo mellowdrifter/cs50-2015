@@ -25,7 +25,7 @@ node* hash_table[HASHTABLE_SIZE] = {NULL};
 
 unsigned int word_count = 0;
 
-unsigned int hash(const char* new_word)
+/* unsigned int hash(const char* new_word)
 {
     // DJB Hash - Modified
     unsigned int hash = 5381;
@@ -34,6 +34,19 @@ unsigned int hash(const char* new_word)
     for(; *word; word++)
     {
         hash = ((hash << 5) + hash) + (*word);
+    }
+    return hash % HASHTABLE_SIZE;
+} */
+
+unsigned int hash(const char* new_word)
+{
+    // SDBM Hash - Modified
+    unsigned int hash;
+    const char* word = new_word;
+
+    for(; *word; word++)
+    {
+        hash = *word + (hash << 6) + (hash << 16) - hash;
     }
     return hash % HASHTABLE_SIZE;
 }
