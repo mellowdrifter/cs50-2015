@@ -16,7 +16,7 @@
 // (e.g., pneumonoultramicroscopicsilicovolcanoconiosis)
 #define LENGTH 47
 #define HASHTABLE_SIZE 128153
-#define MULT 33
+#define MULT 31
 
 /**
  * Returns true if word is in dictionary else false.

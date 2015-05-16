@@ -25,17 +25,17 @@ typedef struct node {
 // But less collissions...
 node* hash_table[HASHTABLE_SIZE] = {NULL};
 
-int word_count = 0;
+unsigned int word_count = 0;
 
 /**
  * Hash function
  */
-/*int hash(const char* word)
+/*unsigned int hash(const char* word)
 {
     // No need to reinvent the wheel. Use hash function 
     // from http://www.reddit.com/r/cs50/comments/1x6vc8/pset6_trie_vs_hashtable/
     // Tweaked just a little bit
-    int length = strlen(word);
+    const int length = strlen(word);
     unsigned int hash = 0;
     for (int i = 0; i < length; i++)
         hash = (hash << 2) ^ word[i];
@@ -44,23 +44,32 @@ int word_count = 0;
     return hash % HASHTABLE_SIZE;
 } */
 
-unsigned int hash(char *word)
+unsigned int hash(char* word)
+{
+    unsigned int hash;
+    char* new_word;
+    new_word = word; // apparently this is quicker
+    for(; *new_word; new_word++)
+        hash = (hash << 2) ^ *new_word;
+        
+    return hash % HASHTABLE_SIZE;
+}
+
+/* unsigned int hash(char *word)
 {
 	unsigned int h = 0;
 	for(; *word; word++)
 		h = MULT * h + *word;
 	return h % HASHTABLE_SIZE;
-}
+} */
 
-void insert(int hash, char* word)
+void insert(const unsigned int hash, char* word)
 {
     if (hash_table[hash] == NULL)
     {
         hash_table[hash] = (node*) malloc(sizeof(node));
         node* cur = hash_table[hash];
-        //printf("current word = %s\n", word);
         strcpy(cur->word, word);
-        //printf("Stored word = %s\n", cur->word);
         cur->next = NULL;
     }
     else
@@ -85,13 +94,13 @@ void insert(int hash, char* word)
  */
 bool check(const char* word)
 {
-    int length = strlen(word);
+    unsigned int length = strlen(word);
     char low_word[length + 1];
-    for(int i = 0; i <= length; i++)
+    for(unsigned int i = 0; i <= length; i++)
     {
         low_word[i] = tolower(word[i]);
     }
-    int hashed = hash(low_word);
+    unsigned int hashed = hash(low_word);
     
     if (hash_table[hashed] == NULL)
     {
@@ -136,8 +145,8 @@ bool load(const char* dictionary)
     while(fgets (word, LENGTH, fp) != NULL) 
     {
         word_count++;
-        int length = strlen(word);
-        for(int i = 0; i <= length; i++)
+        unsigned int length = strlen(word);
+        for(unsigned int i = 0; i <= length; i++)
         {
             word[i] = tolower(word[i]);
         }
@@ -163,7 +172,7 @@ unsigned int size(void)
  */
 bool unload(void)
 {
-    for (int i = 0; i < HASHTABLE_SIZE; i++)
+    for (unsigned int i = 0; i < HASHTABLE_SIZE; i++)
     {
         if (hash_table[i] != NULL)
         {
