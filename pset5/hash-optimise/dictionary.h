@@ -15,7 +15,8 @@
 // maximum length for a word
 // (e.g., pneumonoultramicroscopicsilicovolcanoconiosis)
 #define LENGTH 47
-#define HASHTABLE_SIZE 128153
+//#define HASHTABLE_SIZE 128153
+#define HASHTABLE_SIZE 256123
 #define MULT 31
 
 /**

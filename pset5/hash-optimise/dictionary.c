@@ -21,49 +21,25 @@ typedef struct node {
     struct node* next;
 }node;
 
-// Bigger table means more to initilise and free
-// But less collissions...
 node* hash_table[HASHTABLE_SIZE] = {NULL};
 
 unsigned int word_count = 0;
 
-/**
- * Hash function
- */
-/*unsigned int hash(const char* word)
+unsigned int hash(const char* new_word)
 {
-    // No need to reinvent the wheel. Use hash function 
-    // from http://www.reddit.com/r/cs50/comments/1x6vc8/pset6_trie_vs_hashtable/
-    // Tweaked just a little bit
-    const int length = strlen(word);
-    unsigned int hash = 0;
-    for (int i = 0; i < length; i++)
-        hash = (hash << 2) ^ word[i];
-        
-    //printf("You sent the word %s, the size is %i and the hash is %i\n", word, length, hash % HASHTABLE_SIZE); 
-    return hash % HASHTABLE_SIZE;
-} */
+    // DJB Hash - Modified
+    unsigned int hash = 5381;
+    const char* word = new_word;
 
-unsigned int hash(char* word)
-{
-    unsigned int hash;
-    char* new_word;
-    new_word = word; // apparently this is quicker
-    for(; *new_word; new_word++)
-        hash = (hash << 2) ^ *new_word;
-        
+    for(; *word; word++)
+    {
+        hash = ((hash << 5) + hash) + (*word);
+    }
     return hash % HASHTABLE_SIZE;
 }
 
-/* unsigned int hash(char *word)
-{
-	unsigned int h = 0;
-	for(; *word; word++)
-		h = MULT * h + *word;
-	return h % HASHTABLE_SIZE;
-} */
 
-void insert(const unsigned int hash, char* word)
+void insert(const unsigned int hash, const char* word)
 {
     if (hash_table[hash] == NULL)
     {
@@ -92,21 +68,20 @@ void insert(const unsigned int hash, char* word)
 /**
  * Returns true if word is in dictionary else false.
  */
-bool check(const char* word)
+bool check(const char* initial_word)
 {
-    unsigned int length = strlen(word);
+    const char* word;
+    word = initial_word; // apparently this is quicker
+    const unsigned int length = strlen(word);
+    
     char low_word[length + 1];
     for(unsigned int i = 0; i <= length; i++)
     {
         low_word[i] = tolower(word[i]);
     }
-    unsigned int hashed = hash(low_word);
+    const unsigned int hashed = hash(low_word);
     
-    if (hash_table[hashed] == NULL)
-    {
-        return false;
-    }
-    else
+    if (hash_table[hashed] != NULL)
     {
         node* cur = hash_table[hashed];
         if (strcmp(cur->word, low_word) == 0)
